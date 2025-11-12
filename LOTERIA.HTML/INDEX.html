@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Rifa Virtual 00–99</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      /* Fondo en gradiente rosado-violeta */
+      background: linear-gradient(135deg, #f8c0ff, #ffb6c1, #e1bee7);
+      margin: 0;
+      padding: 20px;
+      text-align: center;
+      min-height: 100vh;
+    }
+    h1 {
+      color: #a92ee7;
+      margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    .imagenes {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .imagenes img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    .imagenes img:hover {
+      transform: scale(1.1);
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(10, 1fr);
+      gap: 8px;
+      max-width: 600px;
+      margin: 20px auto;
+    }
+    .number {
+      background: #7b1fa2;
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: bold;
+      transition: all 0.3s;
+    }
+    .number:hover {
+      background: #4a0072;
+    }
+    .taken {
+      background: #d81b60 !important;
+      cursor: pointer;
+    }
+    #winner {
+      margin-top: 20px;
+      font-size: 1.2em;
+      font-weight: bold;
+      color: #2e7d32;
+    }
+    button {
+      background: #8e24aa;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 1em;
+      margin: 10px;
+      transition: background 0.3s;
+    }
+    button:hover {
+      background: #6a1b9a;
+    }
+    .danger {
+      background: #e91e63;
+    }
+    .danger:hover {
+      background: #ad1457;
+    }
+  </style>
+</head>
+<body>
+  <h1>🎟️ Rifa Dril - Elija dos numeros por $8.000 pesos </h1>
+  <h1>Juega el Sabado 13 de Diciembre 2025 </h1>
+  <h1>(LOTERIA BOYACA) </h1>
+
+  <!-- 🔹 Aquí puedes agregar tus imágenes -->
+  <div class="imagenes">
+    <img <img src="premio.png" alt="Premio">
+    <img <img src="premio1.png" alt="Premio">
+    <img <img src="DRILL.png" alt="Premio">
+  </div>
+
+  <div class="grid" id="numberGrid"></div>
+
+  <div>
+    <button id="drawBtn">🎲 Sortear Ganador</button>
+    <button id="resetBtn" class="danger">♻️ Reiniciar Rifa</button>
+  </div>
+  <div id="winner"></div>
+
+  <script>
+    const ADMIN_CODE = "1234"; // 🔑 Cambia esta clave por la tuya personal
+
+    const grid = document.getElementById('numberGrid');
+    const winnerDiv = document.getElementById('winner');
+    const drawBtn = document.getElementById('drawBtn');
+    const resetBtn = document.getElementById('resetBtn');
+
+    let participants = JSON.parse(localStorage.getItem('participants')) || {};
+
+    function renderNumbers() {
+      grid.innerHTML = "";
+      for (let i = 0; i < 100; i++) {
+        const formatted = i.toString().padStart(2, "0");
+        const btn = document.createElement('div');
+        btn.classList.add('number');
+        btn.textContent = formatted;
+
+        if (participants[formatted]) {
+          btn.classList.add('taken');
+          btn.textContent = `${formatted} (${participants[formatted]})`;
+        }
+
+        btn.addEventListener('click', () => handleClick(formatted));
+        grid.appendChild(btn);
+      }
+    }
+
+    function handleClick(number) {
+      if (participants[number]) {
+        const code = prompt(`🔒 El número ${number} está reservado por ${participants[number]}. Ingresa la clave de administrador para liberarlo:`);
+        if (code === ADMIN_CODE) {
+          delete participants[number];
+          localStorage.setItem('participants', JSON.stringify(participants));
+          renderNumbers();
+          alert(`✅ Número ${number} liberado.`);
+        } else if (code !== null) {
+          alert('❌ Clave incorrecta.');
+        }
+      } else {
+        const name = prompt(`Ingresa tu nombre para reservar el número ${number}:`);
+        if (name) {
+          participants[number] = name;
+          localStorage.setItem('participants', JSON.stringify(participants));
+          renderNumbers();
+        }
+      }
+    }
+
+    drawBtn.addEventListener('click', () => {
+      const takenNumbers = Object.keys(participants);
+      if (takenNumbers.length === 0) {
+        alert('Aún no hay números elegidos.');
+        return;
+      }
+      const randomIndex = Math.floor(Math.random() * takenNumbers.length);
+      const winningNumber = takenNumbers[randomIndex];
+      const winnerName = participants[winningNumber];
+      winnerDiv.textContent = `🏆 El número ganador es ${winningNumber} - ${winnerName}! 🎉`;
+    });
+
+    resetBtn.addEventListener('click', () => {
+      const code = prompt("🔒 Ingresa la clave de administrador para reiniciar la rifa:");
+      if (code === ADMIN_CODE) {
+        const confirmReset = confirm("⚠️ ¿Seguro que quieres borrar todos los registros?");
+        if (confirmReset) {
+          localStorage.removeItem('participants');
+          participants = {};
+          renderNumbers();
+          winnerDiv.textContent = "";
+          alert("♻️ Rifa reiniciada correctamente.");
+        }
+      } else if (code !== null) {
+        alert('❌ Clave incorrecta.');
+      }
+    });
+
+    renderNumbers();
+  </script>
+</body>
+</html>
