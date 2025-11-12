@@ -7,14 +7,35 @@
   <style>
     body {
       font-family: Arial, sans-serif;
-      background: #f4f6f9;
+      /* Fondo en gradiente rosado-violeta */
+      background: linear-gradient(135deg, #f8c0ff, #ffb6c1, #e1bee7);
       margin: 0;
       padding: 20px;
       text-align: center;
+      min-height: 100vh;
     }
     h1 {
-      color: #333;
+      color: #a92ee7;
       margin-bottom: 10px;
+      text-shadow: 1px 1px 3px rgba(0,0,0,0.2);
+    }
+    .imagenes {
+      display: flex;
+      justify-content: center;
+      gap: 15px;
+      flex-wrap: wrap;
+      margin-bottom: 15px;
+    }
+    .imagenes img {
+      width: 250px;
+      height: 250px;
+      object-fit: cover;
+      border-radius: 15px;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+      transition: transform 0.3s;
+    }
+    .imagenes img:hover {
+      transform: scale(1.1);
     }
     .grid {
       display: grid;
@@ -24,7 +45,7 @@
       margin: 20px auto;
     }
     .number {
-      background: #007bff;
+      background: #7b1fa2;
       color: white;
       padding: 12px;
       border-radius: 8px;
@@ -33,20 +54,20 @@
       transition: all 0.3s;
     }
     .number:hover {
-      background: #0056b3;
+      background: #4a0072;
     }
     .taken {
-      background: #dc3545 !important;
+      background: #d81b60 !important;
       cursor: pointer;
     }
     #winner {
       margin-top: 20px;
       font-size: 1.2em;
       font-weight: bold;
-      color: #28a745;
+      color: #2e7d32;
     }
     button {
-      background: #28a745;
+      background: #8e24aa;
       color: white;
       border: none;
       padding: 10px 20px;
@@ -54,21 +75,30 @@
       cursor: pointer;
       font-size: 1em;
       margin: 10px;
+      transition: background 0.3s;
     }
     button:hover {
-      background: #218838;
+      background: #6a1b9a;
     }
     .danger {
-      background: #dc3545;
+      background: #e91e63;
     }
     .danger:hover {
-      background: #b52a37;
+      background: #ad1457;
     }
   </style>
 </head>
 <body>
-  <h1>🎟️ Rifa Virtual - Números 00 al 99</h1>
-  
+  <h1>🎟️ Rifa Dril - Elija dos numeros por $8.000 pesos </h1>
+  <h1>Juega el Sabado 13 de Diciembre 2025 </h1>
+  <h1>(LOTERIA BOYACA) </h1>
+
+  <!-- 🔹 Aquí puedes agregar tus imágenes -->
+  <div class="imagenes">
+    <img src="premio.png" alt="Premio">
+    <img src="premio1.png" alt="Premio">
+    <img src="DRILL.png" alt="Premio">
+  </div>
 
   <div class="grid" id="numberGrid"></div>
 
